@@ -160,6 +160,52 @@ namespace TwitchDownloaderCore
                     throw new Exception($"Failed to finalize video. The download cache has not been cleared and can be found at {_vodCacheDir} along with a log file.");
                 }
 
+// -------------------------------------------------------------
+// VODとチャットの同期トリムオプションを適用するためのチャットダウンロードロジック
+// -------------------------------------------------------------
+
+if (downloadOptions.DownloadChat)
+{
+    _progress.SetStatus("Downloading Chat [4/4]");
+    
+    // VideoDownloadOptionsから新しいプロパティを取得
+    bool downloadChatWithVideoTime = downloadOptions.DownloadChatWithVideoTime;
+
+    var chatOptions = new ChatDownloadOptions
+    {
+        Id = downloadOptions.Id,
+        DownloadThreads = downloadOptions.DownloadThreads,
+        ClientMode = downloadOptions.ChatClient,
+        ConnectionCount = downloadOptions.ChatConnectionCount,
+        // チャットファイル名を設定 (VODファイル名から拡張子を置き換え)
+        Filename = Path.Combine(Path.GetDirectoryName(downloadOptions.Filename) ?? "", Path.GetFileNameWithoutExtension(downloadOptions.Filename) + "_chat.json"),
+        
+        // 【新しいロジック】: VODのクロップ設定をチャットに適用するかどうか
+        CropBeginning = downloadChatWithVideoTime
+            ? downloadOptions.TrimBeginningTime
+            : TimeSpan.Zero,
+            
+        // 【新しいロジック】: VODのクロップ設定をチャットに適用するかどうか
+        CropEnd = downloadChatWithVideoTime
+            ? downloadOptions.TrimEndingTime
+            : videoLength, 
+            
+        Timezone = downloadOptions.ChatTimezone,
+        EmbedData = downloadOptions.ChatEmbedData,
+        BttvEmotes = downloadOptions.ChatBttvEmotes,
+        FfzEmotes = downloadOptions.ChatFfzEmotes,
+        StvEmotes = downloadOptions.ChatStvEmotes,
+        TempFolder = downloadOptions.TempFolder
+    };
+    
+    var chatDownloader = new ChatDownloader(chatOptions, _progress);
+    await chatDownloader.DownloadAsync(cancellationToken);
+}
+
+// -------------------------------------------------------------
+// 挿入終わり
+// -------------------------------------------------------------
+                
                 _progress.ReportProgress(100);
             }
             finally
