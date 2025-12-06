@@ -22,5 +22,13 @@ namespace TwitchDownloaderCore.Options
         public Func<FileInfo, FileInfo> FileCollisionCallback { get; set; } = info => info;
         public VideoTrimMode TrimMode { get; set; }
         public bool DelayDownload { get; set; }
+        // ... (既存のプロパティ) ...
+
+        /// <summary>
+        /// VODのクロップ時間をチャットダウンロードにも適用するかどうか
+        /// </summary>
+        public bool DownloadChatWithVideoTime { get; set; } // ← **この行を追加**
+        
+        // ... (その他の既存のプロパティ) ...
     }
 }
