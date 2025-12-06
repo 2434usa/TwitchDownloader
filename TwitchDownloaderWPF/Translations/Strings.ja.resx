@@ -1055,4 +1055,10 @@
   <data name="FatalErrorMessage" xml:space="preserve">
     <value>{0} can resume but may be unstable. Do you want to resume?</value><comment>{0} is the name of the application.</comment>
   </data>
+<data name="DownloadChatWithVideoTime" xml:space="preserve">
+  <value>VODと同じ時間設定でチャットをダウンロードする</value>
+</data>
+<data name="DownloadChatWithVideoTimeTooltip" xml:space="preserve">
+  <value>チェックを入れると、上記の開始/終了時間でクロップされたチャットがダウンロードされます。</value>
+</data>
 </root>
