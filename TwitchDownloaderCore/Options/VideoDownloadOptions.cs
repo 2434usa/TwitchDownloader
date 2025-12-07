@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.IO;
 using TwitchDownloaderCore.Models;
+using TwitchDownloaderCore.TwitchObjects; // ChatClientEnum, ChatEmbedData, ChatCompression を使用するために必要
 
 namespace TwitchDownloaderCore.Options
 {
@@ -22,13 +23,24 @@ namespace TwitchDownloaderCore.Options
         public Func<FileInfo, FileInfo> FileCollisionCallback { get; set; } = info => info;
         public VideoTrimMode TrimMode { get; set; }
         public bool DelayDownload { get; set; }
-        // ... (既存のプロパティ) ...
+
+        // --- チャットダウンロード関連のプロパティ ---
+        
+        // ★ エラー1, 4, 6 の解消に必要なプロパティ群
+        public bool DownloadChat { get; set; }
+        public ChatClientEnum ChatClient { get; set; }
+        public int ChatConnectionCount { get; set; } = 1;
 
         /// <summary>
         /// VODのクロップ時間をチャットダウンロードにも適用するかどうか
         /// </summary>
-        public bool DownloadChatWithVideoTime { get; set; } // ← **この行を追加**
-        
-        // ... (その他の既存のプロパティ) ...
+        public bool DownloadChatWithVideoTime { get; set; } // ← 新しく追加したプロパティ
+
+        public ChatEmbedData EmbedData { get; set; }
+        public bool BttvEmotes { get; set; }
+        public bool FfzEmotes { get; set; }
+        public bool StvEmotes { get; set; }
+        public TimeSpan ChatTimezone { get; set; }
+        public ChatCompression ChatCompression { get; set; }
     }
 }
