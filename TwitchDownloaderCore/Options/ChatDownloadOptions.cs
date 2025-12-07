@@ -1,19 +1,26 @@
-﻿using System;
+using System;
 using System.IO;
 using TwitchDownloaderCore.Models;
+using TwitchDownloaderCore.TwitchObjects; // ChatClientEnum, ChatEmbedData, ChatCompression などの型定義を使用するために追加
 
 namespace TwitchDownloaderCore.Options
 {
     public class ChatDownloadOptions
     {
         public ChatFormat DownloadFormat { get; set; } = ChatFormat.Json;
-        public string Id { get; set; }
+        public long Id { get; set; } // stringからlongに変更
         public string Filename { get; set; }
         public ChatCompression Compression { get; set; } = ChatCompression.None;
-        public bool TrimBeginning { get; set; }
-        public double TrimBeginningTime { get; set; }
-        public bool TrimEnding { get; set; }
-        public double TrimEndingTime { get; set; }
+
+        // VODトリム時間に合わせて追加
+        public TimeSpan CropBeginning { get; set; } 
+        public TimeSpan CropEnd { get; set; }
+        
+        // ChatClient/Connection/Timezoneのプロパティ
+        public ChatClientEnum ClientMode { get; set; } 
+        public int ConnectionCount { get; set; } = 1;
+        public TimeSpan Timezone { get; set; }
+
         public bool EmbedData { get; set; }
         public bool BttvEmotes { get; set; }
         public bool FfzEmotes { get; set; }
